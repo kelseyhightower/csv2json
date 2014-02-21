@@ -18,7 +18,6 @@ func Convert(r io.Reader, columns []string) ([]byte, error) {
 		if err != nil {
 			return nil, err
 		}
-
 		r := make(map[string]string)
 		for i, n := range columns {
 			r[n] = record[i]
