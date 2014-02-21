@@ -3,16 +3,11 @@ package csv2json
 import (
 	"encoding/csv"
 	"encoding/json"
+	"io"
 )
 
-type famousGopher struct {
-	Name  string
-	Date  string
-	Title string
-}
-
-func Convert(r io.Reader) ([]byte, error) {
-	gophers := make([]famousGopher, 0)
+func Convert(r io.Reader, columns []string) ([]byte, error) {
+	rows := make([]map[string]string, 0)
 	csvReader := csv.NewReader(r)
 	csvReader.TrimLeadingSpace = true
 	for {
@@ -23,14 +18,14 @@ func Convert(r io.Reader) ([]byte, error) {
 		if err != nil {
 			return nil, err
 		}
-		gopher := famousGopher{
-			Name:  record[0],
-			Date:  record[1],
-			Title: record[2],
+
+		r := make(map[string]string)
+		for i, n := range columns {
+			r[n] = record[i]
 		}
-		gophers = append(gophers, gopher)
+		rows = append(rows, r)
 	}
-	data, err := json.MarshalIndent(&gophers, "", "  ")
+	data, err := json.MarshalIndent(&rows, "", "  ")
 	if err != nil {
 		return nil, err
 	}
