@@ -18,11 +18,11 @@ func Convert(r io.Reader, columns []string) ([]byte, error) {
 		if err != nil {
 			return nil, err
 		}
-		r := make(map[string]string)
+		row := make(map[string]string)
 		for i, n := range columns {
-			r[n] = record[i]
+			row[n] = record[i]
 		}
-		rows = append(rows, r)
+		rows = append(rows, row)
 	}
 	data, err := json.MarshalIndent(&rows, "", "  ")
 	if err != nil {
